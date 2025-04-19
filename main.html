@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body onload="showScores();">
+    <h1>Game High Scores</h1>
+    <form>
+      <label>Name:</label>
+      <input type="text" id="name" /><br />
+      <label>Score:</label>
+      <input type="text" id="score" /><br />
+      <input type="button" value="Submit" onclick="saveScore()" />
+    </form>
+    <div id="scores"></div>
+    <script type="text/javascript" src="./script.js"></script>
+  </body>
+</html>
