@@ -1,48 +1,39 @@
-// Get DOM elements
 const nameInput = document.getElementById("name");
 const scoreInput = document.getElementById("score");
 const scores = document.getElementById("scores");
 
-// Save score to Local Storage
 function saveScore() {
   const name = nameInput.value.trim();
-  const score = scoreInput.value.trim();
+  const score = parseInt(scoreInput.value.trim());
 
-  if (name === "" || score === "" || isNaN(score)) {
-    alert("Please enter a valid name and numeric score.");
-    return;
-  }
+  if (!name || isNaN(score)) return;
 
-  // Get existing scores or initialize an empty array
-  let highScores = JSON.parse(localStorage.getItem("highScores")) || [];
+  // Use key: "scores" (not "highScores")
+  const savedScores = JSON.parse(localStorage.getItem("scores")) || [];
 
-  // Add new score
-  highScores.push({ name: name, score: parseInt(score) });
+  savedScores.push({ name, score });
 
-  // Save updated scores back to Local Storage
-  localStorage.setItem("highScores", JSON.stringify(highScores));
+  localStorage.setItem("scores", JSON.stringify(savedScores));
 
-  // Clear input fields
   nameInput.value = "";
   scoreInput.value = "";
 
-  // Update the scores display
   showScores();
 }
 
-// Show scores in div
 function showScores() {
-  const highScores = JSON.parse(localStorage.getItem("highScores")) || [];
+  const savedScores = JSON.parse(localStorage.getItem("scores")) || [];
 
-  // Clear previous content
   scores.innerHTML = "";
 
-  if (highScores.length === 0) {
+  if (savedScores.length === 0) {
     scores.textContent = "No scores yet";
     return;
   }
 
-  // Create table
+  // Sort scores in descending order
+  savedScores.sort((a, b) => b.score - a.score);
+
   const table = document.createElement("table");
   const headerRow = document.createElement("tr");
 
@@ -55,15 +46,13 @@ function showScores() {
   headerRow.appendChild(scoreHeader);
   table.appendChild(headerRow);
 
-  // Add rows for each score
-  highScores.forEach(entry => {
+  savedScores.forEach(({ name, score }) => {
     const row = document.createElement("tr");
-
     const nameCell = document.createElement("td");
-    nameCell.textContent = entry.name;
-
     const scoreCell = document.createElement("td");
-    scoreCell.textContent = entry.score;
+
+    nameCell.textContent = name;
+    scoreCell.textContent = score;
 
     row.appendChild(nameCell);
     row.appendChild(scoreCell);
@@ -72,3 +61,6 @@ function showScores() {
 
   scores.appendChild(table);
 }
+
+// Show scores on page load
+showScores();
